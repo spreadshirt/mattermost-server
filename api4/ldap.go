@@ -13,8 +13,13 @@ func (api *API) InitLdap() {
 	api.BaseRoutes.LDAP.Handle("/sync", api.ApiSessionRequired(syncLdap)).Methods("POST")
 	api.BaseRoutes.LDAP.Handle("/test", api.ApiSessionRequired(testLdap)).Methods("POST")
 
+	// GET /api/v4/ldap/groups
 	api.BaseRoutes.LDAP.Handle("/groups", api.ApiSessionRequired(getGroups)).Methods("GET")
+
+	// POST /api/v4/ldap/groups/:dn/link
 	api.BaseRoutes.LDAP.Handle("/groups/{dn:[A-Za-z0-9]+}/link", api.ApiSessionRequired(linkGroup)).Methods("POST")
+
+	// DELETE /api/v4/ldap/groups/:dn/link
 	api.BaseRoutes.LDAP.Handle("/groups/{dn:[A-Za-z0-9]+}/link", api.ApiSessionRequired(unlinkGroup)).Methods("DELETE")
 }
 
