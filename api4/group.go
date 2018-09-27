@@ -19,7 +19,10 @@ const (
 )
 
 func (api *API) InitGroup() {
+	// GET /api/v4/groups/:group_id
 	api.BaseRoutes.Groups.Handle("/{group_id:[A-Za-z0-9]+}", api.ApiSessionRequiredTrustRequester(getGroup)).Methods("GET")
+
+	// PUT /api/v4/groups/:group_id/patch
 	api.BaseRoutes.Groups.Handle("/{group_id:[A-Za-z0-9]+}/patch", api.ApiSessionRequired(patchGroup)).Methods("PUT")
 
 	for _, syncableType := range model.GroupSyncableTypes {
