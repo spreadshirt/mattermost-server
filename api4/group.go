@@ -24,11 +24,26 @@ func (api *API) InitGroup() {
 
 	for _, syncableType := range model.GroupSyncableTypes {
 		name := strings.ToLower(syncableType.String())
+
+		// POST /api/v4/teams/:team_id/link
+		// POST /api/v4/channels/:channel_id/link
 		api.BaseRoutes.Groups.Handle(fmt.Sprintf("/{group_id:[A-Za-z0-9]+}/%[1]ss/{%[1]s_id:[A-Za-z0-9]+}/link", name), api.ApiSessionRequired(linkGroupSyncable(syncableType))).Methods("POST")
-		api.BaseRoutes.Groups.Handle(fmt.Sprintf("/{group_id:[A-Za-z0-9]+}/%[1]ss/{%[1]s_id:[A-Za-z0-9]+}", name), api.ApiSessionRequired(getGroupSyncable(syncableType))).Methods("GET")
-		api.BaseRoutes.Groups.Handle(fmt.Sprintf("/{group_id:[A-Za-z0-9]+}/%[1]ss", name), api.ApiSessionRequired(getGroupSyncables(syncableType))).Methods("GET")
-		api.BaseRoutes.Groups.Handle(fmt.Sprintf("/{group_id:[A-Za-z0-9]+}/%[1]ss/{%[1]s_id:[A-Za-z0-9]+}/patch", name), api.ApiSessionRequired(patchGroupSyncable(syncableType))).Methods("PUT")
+
+		// DELETE /api/v4/teams/:team_id/link
+		// DELETE /api/v4/channels/:channel_id/link
 		api.BaseRoutes.Groups.Handle(fmt.Sprintf("/{group_id:[A-Za-z0-9]+}/%[1]ss/{%[1]s_id:[A-Za-z0-9]+}/link", name), api.ApiSessionRequired(unlinkGroupSyncable(syncableType))).Methods("DELETE")
+
+		// GET /api/v4/teams/:team_id
+		// GET /api/v4/channels/:channel_id
+		api.BaseRoutes.Groups.Handle(fmt.Sprintf("/{group_id:[A-Za-z0-9]+}/%[1]ss/{%[1]s_id:[A-Za-z0-9]+}", name), api.ApiSessionRequired(getGroupSyncable(syncableType))).Methods("GET")
+
+		// GET /api/v4/teams
+		// GET /api/v4/channels
+		api.BaseRoutes.Groups.Handle(fmt.Sprintf("/{group_id:[A-Za-z0-9]+}/%[1]ss", name), api.ApiSessionRequired(getGroupSyncables(syncableType))).Methods("GET")
+
+		// PUT /api/v4/teams/:team_id/patch
+		// PUT /api/v4/channels/:channel_id/patch
+		api.BaseRoutes.Groups.Handle(fmt.Sprintf("/{group_id:[A-Za-z0-9]+}/%[1]ss/{%[1]s_id:[A-Za-z0-9]+}/patch", name), api.ApiSessionRequired(patchGroupSyncable(syncableType))).Methods("PUT")
 	}
 }
 
